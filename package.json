@@ -1,0 +1,13 @@
+{
+  "name": "registration-system",
+  "version": "1.0.0",
+  "description": "registration-form",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "hitanshu",
+  "license": "ISC",
+  "type": "commonjs"
+}

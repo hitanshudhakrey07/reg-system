@@ -1,0 +1,61 @@
+<!--
+Developer    : Hitanshu
+Email        : hitanshudhakrey07@gmail.com
+Version      : 1.0.0
+Description  : Login page for existing users.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Registration System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <div id="message" class="message"></div>
+        </form>
+        <p><a href="reset-password.html">Forgot Password?</a></p>
+        <p>Don't have an account? <a href="register.html">Register here</a></p>
+        <p><a href="index.html">Back to Home</a></p>
+    </div>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            const messageDiv = document.getElementById('message');
+
+            try {
+                const response = await login(email, password);
+                if (response.token) {
+                    localStorage.setItem('authToken', response.token);
+                    localStorage.setItem('user', JSON.stringify(response.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    messageDiv.textContent = response.error?.message || 'Login failed';
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                messageDiv.textContent = error.message || 'An error occurred';
+                messageDiv.className = 'message error';
+            }
+        });
+    </script>
+</body>
+</html>

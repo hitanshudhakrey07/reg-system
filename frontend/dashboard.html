@@ -1,101 +1,519 @@
-<!--
-Developer    : Hitanshu
-Email        : hitanshudhakrey07@gmail.com
-Version      : 1.0.0
-Description  : User dashboard page (protected).
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Registration System</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <title>Dashboard | AuthFlow Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050508;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated Gradient Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
+            z-index: -2;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Profile Section */
+        .profile-section, .sessions-section {
+            background: rgba(15, 25, 35, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 32px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-section:hover, .sessions-section:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .profile-section h2, .sessions-section h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .info-row .label {
+            font-weight: 600;
+            width: 140px;
+            color: #a855f7;
+        }
+
+        .info-row .value {
+            flex: 1;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Sessions List */
+        #sessionsList {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 8px;
+        }
+
+        .session-item {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .session-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+        }
+
+        .session-item:last-child {
+            border-bottom: none;
+        }
+
+        .session-device {
+            font-weight: 600;
+            color: #a855f7;
+        }
+
+        .session-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        .btn-revoke {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-revoke:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1d2e, #0f0f1a);
+            border-radius: 32px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            animation: modalSlideIn 0.4s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 24px;
+            top: 20px;
+            font-size: 32px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #a855f7;
+        }
+
+        .modal-content h2 {
+            color: white;
+            margin-bottom: 24px;
+            font-size: 24px;
+        }
+
+        .modal .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .modal .form-group input, .modal .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .btn-save {
+            width: 100%;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .message {
+            margin-top: 16px;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .message.error {
+            background: rgba(220, 38, 38, 0.2);
+            color: #f87171;
+        }
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+    </style>
 </head>
 <body>
+    <div class="bg-animation"></div>
+    <div class="bg-grid"></div>
+
     <div class="dashboard-container">
         <header class="dashboard-header">
-            <h1>Welcome, <span id="userName"></span></h1>
-            <button id="logoutBtn" class="btn-logout">Logout</button>
+            <h1>✦ Welcome, <span id="userName"></span></h1>
+            <button id="logoutBtn" class="btn-logout">Logout →</button>
         </header>
 
         <div class="profile-section">
-            <h2>Profile Information</h2>
+            <h2>📋 Profile Information</h2>
             <div class="profile-info">
-                <div class="info-row">
-                    <span class="label">Name:</span>
-                    <span id="profileName" class="value"></span>
-                </div>
-                <div class="info-row">
-                    <span class="label">Email:</span>
-                    <span id="profileEmail" class="value"></span>
-                </div>
-                <div class="info-row">
-                    <span class="label">Username:</span>
-                    <span id="profileUsername" class="value"></span>
-                </div>
-                <div class="info-row">
-                    <span class="label">Mobile:</span>
-                    <span id="profileMobile" class="value"></span>
-                </div>
-                <div class="info-row">
-                    <span class="label">Age:</span>
-                    <span id="profileAge" class="value"></span>
-                </div>
-                <div class="info-row">
-                    <span class="label">Gender:</span>
-                    <span id="profileGender" class="value"></span>
-                </div>
-                <div class="info-row">
-                    <span class="label">Member Since:</span>
-                    <span id="profileCreatedAt" class="value"></span>
-                </div>
+                <div class="info-row"><span class="label">Full Name:</span><span id="profileName" class="value"></span></div>
+                <div class="info-row"><span class="label">Email Address:</span><span id="profileEmail" class="value"></span></div>
+                <div class="info-row"><span class="label">Username:</span><span id="profileUsername" class="value"></span></div>
+                <div class="info-row"><span class="label">Mobile Number:</span><span id="profileMobile" class="value"></span></div>
+                <div class="info-row"><span class="label">Age:</span><span id="profileAge" class="value"></span></div>
+                <div class="info-row"><span class="label">Gender:</span><span id="profileGender" class="value"></span></div>
+                <div class="info-row"><span class="label">Member Since:</span><span id="profileCreatedAt" class="value"></span></div>
             </div>
-            <button id="editProfileBtn" class="btn-edit">Edit Profile</button>
+            <button id="editProfileBtn" class="btn-edit">✎ Edit Profile</button>
         </div>
 
         <div class="sessions-section">
-            <h2>Active Sessions</h2>
+            <h2>🖥️ Active Sessions</h2>
             <div id="sessionsList"></div>
-        </div>
-
-        <!-- Edit Profile Modal (hidden by default) -->
-        <div id="editModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Edit Profile</h2>
-                <form id="editProfileForm">
-                    <div class="form-group">
-                        <label for="editName">Name</label>
-                        <input type="text" id="editName" name="name">
-                    </div>
-                    <div class="form-group">
-                        <label for="editMobile">Mobile</label>
-                        <input type="tel" id="editMobile" name="mobile">
-                    </div>
-                    <div class="form-group">
-                        <label for="editAge">Age</label>
-                        <input type="number" id="editAge" name="age" min="18" max="120">
-                    </div>
-                    <div class="form-group">
-                        <label for="editGender">Gender</label>
-                        <select id="editGender" name="gender">
-                            <option value="">Select gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                            <option value="Prefer not to say">Prefer not to say</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-save">Save Changes</button>
-                </form>
-                <div id="editMessage" class="message"></div>
-            </div>
         </div>
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script>
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                <div class="form-group"><label>Name</label><input type="text" id="editName"></div>
+                <div class="form-group"><label>Mobile</label><input type="tel" id="editMobile"></div>
+                <div class="form-group"><label>Age</label><input type="number" id="editAge" min="18" max="120"></div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="editGender">
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-save">Save Changes</button>
+            </form>
+            <div id="editMessage" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000/api/v1';
+        
+        const getAuthToken = () => localStorage.getItem('authToken');
+        const removeAuthToken = () => localStorage.removeItem('authToken');
+        const getUser = () => JSON.parse(localStorage.getItem('user') || 'null');
+        const setUser = (user) => localStorage.setItem('user', JSON.stringify(user));
+        const removeUser = () => localStorage.removeItem('user');
+
+        async function apiRequest(endpoint, options = {}) {
+            const url = `${API_BASE}${endpoint}`;
+            const headers = { 'Content-Type': 'application/json', ...options.headers };
+            const token = getAuthToken();
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            const response = await fetch(url, { ...options, headers });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error?.message || 'Request failed');
+            return data;
+        }
+
+        async function getProfile() { return apiRequest('/users/me'); }
+        async function updateProfile(updates) { return apiRequest('/users/me', { method: 'PUT', body: JSON.stringify(updates) }); }
+        async function getSessions() { const data = await apiRequest('/auth/sessions'); return data.sessions; }
+        async function revokeSession(sessionId) { return apiRequest(`/auth/sessions/${sessionId}`, { method: 'DELETE' }); }
+        async function logout() {
+            try { await apiRequest('/auth/logout', { method: 'POST' }); } catch (err) { console.error(err); }
+            removeAuthToken(); removeUser();
+        }
+
+        async function loadDashboard() {
+            try {
+                const user = getUser();
+                if (!user) { window.location.href = 'login.html'; return; }
+                document.getElementById('userName').textContent = user.name || user.username;
+                const profile = await getProfile();
+                document.getElementById('profileName').textContent = profile.name;
+                document.getElementById('profileEmail').textContent = profile.email;
+                document.getElementById('profileUsername').textContent = profile.username;
+                document.getElementById('profileMobile').textContent = profile.mobile;
+                document.getElementById('profileAge').textContent = profile.age;
+                document.getElementById('profileGender').textContent = profile.gender;
+                document.getElementById('profileCreatedAt').textContent = new Date(profile.created_at).toLocaleDateString();
+                
+                const sessions = await getSessions();
+                const container = document.getElementById('sessionsList');
+                if (!sessions.length) container.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">No active sessions</div>';
+                else {
+                    container.innerHTML = sessions.map(s => `
+                        <div class="session-item">
+                            <div>
+                                <div class="session-device">${s.device_info?.userAgent || 'Unknown Device'}</div>
+                                <div class="session-meta">IP: ${s.ip_address || 'Unknown'} • Last active: ${new Date(s.last_activity).toLocaleString()}</div>
+                            </div>
+                            <button class="btn-revoke" data-session-id="${s.id}">Revoke</button>
+                        </div>
+                    `).join('');
+                    document.querySelectorAll('.btn-revoke').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            if (confirm('Revoke this session?')) {
+                                try { await revokeSession(btn.dataset.sessionId); await loadDashboard(); } 
+                                catch (err) { alert('Failed: ' + err.message); }
+                            }
+                        });
+                    });
+                }
+            } catch (err) {
+                if (err.message === 'Unauthorized' || err.message === 'Invalid token') {
+                    await logout(); window.location.href = 'login.html';
+                } else alert('Error: ' + err.message);
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => { await logout(); window.location.href = 'index.html'; });
+        
+        const modal = document.getElementById('editModal');
+        document.getElementById('editProfileBtn').onclick = async () => {
+            const user = getUser();
+            if (user) {
+                document.getElementById('editName').value = user.name || '';
+                document.getElementById('editMobile').value = user.mobile || '';
+                document.getElementById('editAge').value = user.age || '';
+                document.getElementById('editGender').value = user.gender || '';
+            }
+            modal.style.display = 'flex';
+        };
+        document.querySelector('.close').onclick = () => modal.style.display = 'none';
+        window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+        
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const updates = {};
+            const name = document.getElementById('editName').value.trim();
+            const mobile = document.getElementById('editMobile').value.trim();
+            const age = document.getElementById('editAge').value;
+            const gender = document.getElementById('editGender').value;
+            if (name) updates.name = name;
+            if (mobile) updates.mobile = mobile;
+            if (age) updates.age = parseInt(age);
+            if (gender) updates.gender = gender;
+            const msgDiv = document.getElementById('editMessage');
+            try {
+                const response = await updateProfile(updates);
+                const currentUser = getUser();
+                setUser({ ...currentUser, ...response.user });
+                await loadDashboard();
+                msgDiv.textContent = '✓ Profile updated successfully';
+                msgDiv.className = 'message success';
+                setTimeout(() => { modal.style.display = 'none'; msgDiv.textContent = ''; }, 1200);
+            } catch (err) { msgDiv.textContent = '❌ ' + err.message; msgDiv.className = 'message error'; }
+        });
+        
+        if (!getAuthToken()) window.location.href = 'login.html';
+        else loadDashboard();
+    </script>
 </body>
 </html>

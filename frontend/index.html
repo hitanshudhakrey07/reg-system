@@ -1,46 +1,380 @@
-<!--
-Developer    : Hitanshu
-Email        : hitanshudhakrey07@gmail.com
-Version      : 1.0.0
-Description  : Landing page for the registration system.
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome | Registration System</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>AuthFlow Pro | Premium Authentication</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050508;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Gradient Background with Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.3) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 8px);
+            z-index: -2;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0c10 0%, #1a1d2e 50%, #0f0f1a 100%);
+            z-index: -1;
+        }
+
+        /* Marquee Animation */
+        .marquee-container {
+            background: linear-gradient(90deg, #6366f1, #a855f7, #ec489a);
+            padding: 12px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 25s linear infinite;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .marquee span {
+            margin: 0 40px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #a855f7;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 80px 0;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #a855f7 50%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            padding: 14px 36px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 14px 36px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #a855f7;
+        }
+
+        /* Stats Cards */
+        .stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 48px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 28px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .feature-card h3 {
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Dropdown Animation */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .btn-group, .stats {
+                justify-content: center;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="bg-pattern"></div>
+    <div class="bg-gradient"></div>
+    
+    <div class="marquee-container">
+        <div class="marquee">
+            <span>🚀 SECURE AUTHENTICATION SYSTEM</span>
+            <span>🔒 JWT TOKEN BASED SECURITY</span>
+            <span>📧 EMAIL VERIFICATION WITH OTP</span>
+            <span>🔄 REAL-TIME SESSION MANAGEMENT</span>
+            <span>🔐 256-BIT ENCRYPTION</span>
+            <span>⚡ 99.9% UPTIME GUARANTEED</span>
+            <span>🚀 SECURE AUTHENTICATION SYSTEM</span>
+            <span>🔒 JWT TOKEN BASED SECURITY</span>
+            <span>📧 EMAIL VERIFICATION WITH OTP</span>
+        </div>
+    </div>
+
     <div class="container">
-        <header>
-            <h1>Registration System</h1>
-            <p>Secure user registration and authentication platform</p>
-        </header>
-        <main>
-            <div class="cta-buttons">
-                <a href="register.html" class="btn btn-primary">Register</a>
-                <a href="login.html" class="btn btn-secondary">Login</a>
+        <nav class="navbar">
+            <div class="logo">✦ AUTHFLOW PRO</div>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Features</a>
+                <a href="#">Security</a>
+                <a href="#">Support</a>
             </div>
-            <div class="features">
-                <div class="feature">
-                    <h3>Secure Authentication</h3>
-                    <p>JWT-based authentication with session management</p>
+        </nav>
+
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Next-Gen Authentication Platform</h1>
+                <p>Enterprise-grade security with modern authentication flows. Protect your users with JWT, OTP verification, and intelligent session management.</p>
+                <div class="btn-group">
+                    <a href="register.html" class="btn-primary">Get Started →</a>
+                    <a href="login.html" class="btn-secondary">Sign In</a>
                 </div>
-                <div class="feature">
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>10K+</h3>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>99.9%</h3>
+                        <p>Uptime</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>256-bit</h3>
+                        <p>Encryption</p>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>JWT Authentication</h3>
+                    <p>Secure token-based authentication with automatic refresh and blacklisting</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📧</div>
                     <h3>Email Verification</h3>
-                    <p>OTP verification for account activation</p>
+                    <p>6-digit OTP verification with expiration and resend capabilities</p>
                 </div>
-                <div class="feature">
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Session Management</h3>
+                    <p>Track active sessions across devices with one-click revocation</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
                     <h3>Password Recovery</h3>
-                    <p>Reset password via email OTP</p>
+                    <p>Secure password reset flow with email OTP verification</p>
                 </div>
             </div>
-        </main>
-        <footer>
-            <p>&copy; 2026 Registration System. All rights reserved.</p>
-        </footer>
+        </div>
     </div>
 </body>
 </html>

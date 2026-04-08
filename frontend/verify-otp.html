@@ -9,28 +9,238 @@ Description  : OTP verification page for email confirmation.
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify OTP | Registration System</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Verify Email | AuthFlow Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Animated Pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(45deg, rgba(99,102,241,0.05) 0px, rgba(99,102,241,0.05) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+        }
+
+        .verify-container {
+            max-width: 500px;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(20, 30, 45, 0.95), rgba(10, 20, 35, 0.98));
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 102, 241, 0.3);
+            overflow: hidden;
+            text-align: center;
+            animation: floatIn 0.5s ease-out;
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .verify-header {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            padding: 48px 32px;
+            position: relative;
+        }
+
+        .verify-header .icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .verify-header h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .verify-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+
+        .verify-form {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: #cbd5e1;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .otp-input {
+            width: 100%;
+            padding: 18px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            font-size: 28px;
+            text-align: center;
+            letter-spacing: 12px;
+            font-weight: 700;
+            font-family: 'Inter', monospace;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
+            background: rgba(30, 41, 59, 1);
+            letter-spacing: 8px;
+        }
+
+        .btn-verify {
+            width: 100%;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-verify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.5);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            text-align: center;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.error {
+            background: rgba(220, 38, 38, 0.2);
+            color: #f87171;
+            border-left: 3px solid #ef4444;
+        }
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border-left: 3px solid #22c55e;
+        }
+
+        .resend-link {
+            margin-top: 24px;
+        }
+
+        .resend-link a {
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .resend-link a:hover {
+            color: #6366f1;
+        }
+
+        .back-link {
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Verify Email Address</h1>
-        <p>We've sent a 6-digit OTP to your email. Please enter it below to complete registration.</p>
-        <form id="verifyForm">
-            <div class="form-group">
-                <label for="otp">OTP Code</label>
-                <input type="text" id="otp" name="otp" required maxlength="6" pattern="\d{6}" placeholder="000000">
+    <div class="verify-container">
+        <div class="verify-header">
+            <div class="icon">✉️</div>
+            <h1>Verify Your Identity</h1>
+            <p>Enter the 6-digit code sent to your email</p>
+        </div>
+        <div class="verify-form">
+            <form id="verifyForm">
+                <div class="form-group">
+                    <label>VERIFICATION CODE</label>
+                    <input type="text" id="otp" class="otp-input" required maxlength="6" pattern="\d{6}" placeholder="000000">
+                </div>
+                <button type="submit" class="btn-verify">Verify Account →</button>
+                <div id="verifyMessage" class="message"></div>
+            </form>
+            <div class="resend-link">
+                <a href="#" id="resendLink">⟳ Didn't receive code? Resend OTP</a>
             </div>
-            <button type="submit" class="btn btn-primary">Verify</button>
-            <div id="message" class="message"></div>
-        </form>
-        <p>Didn't receive code? <a href="#" id="resendLink">Resend OTP</a></p>
-        <p><a href="register.html">Back to Registration</a></p>
+            <div class="back-link">
+                <a href="register.html">← Back to Registration</a>
+            </div>
+        </div>
     </div>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
+
     <script>
+        const API_BASE = 'http://localhost:4000/api/v1';
         const email = localStorage.getItem('pendingRegistrationEmail');
+        
         if (!email) {
             window.location.href = 'register.html';
         }
@@ -38,43 +248,48 @@ Description  : OTP verification page for email confirmation.
         document.getElementById('verifyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const otpCode = document.getElementById('otp').value.trim();
-            const messageDiv = document.getElementById('message');
+            const messageDiv = document.getElementById('verifyMessage');
 
             try {
-                const response = await verifyOtp(email, otpCode);
-                if (response.success) {
-                    localStorage.removeItem('pendingRegistrationEmail');
-                    alert('Account verified successfully! Please login.');
+                const response = await fetch(`${API_BASE}/auth/register/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp_code: otpCode })
+                });
+                const data = await response.json();
+                
+                if (!response.ok) throw new Error(data.error?.message || 'Invalid verification code');
+                
+                localStorage.removeItem('pendingRegistrationEmail');
+                messageDiv.textContent = '✓ Account verified successfully! Redirecting...';
+                messageDiv.className = 'message success';
+                setTimeout(() => {
                     window.location.href = 'login.html';
-                } else {
-                    messageDiv.textContent = response.error?.message || 'Verification failed';
-                    messageDiv.className = 'message error';
-                }
-            } catch (error) {
-                messageDiv.textContent = error.message || 'An error occurred';
+                }, 1500);
+            } catch (err) {
+                messageDiv.textContent = '❌ ' + err.message;
                 messageDiv.className = 'message error';
             }
         });
 
         document.getElementById('resendLink').addEventListener('click', async (e) => {
             e.preventDefault();
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = 'Resending OTP...';
-            messageDiv.className = 'message info';
-
-            // We need to re-send OTP for the same email; this would call the same registration endpoint but with existing pending user.
-            // For simplicity, we could call a resend endpoint; but our API doesn't have that. Alternatively, we could re-use the request-otp endpoint.
-            // For now, we'll assume the backend supports re-requesting OTP for pending registration.
+            const messageDiv = document.getElementById('verifyMessage');
+            messageDiv.textContent = '⟳ Sending new code...';
+            messageDiv.className = 'message';
+            
             try {
-                // This requires a pending user in the database; the registration endpoint will detect existing pending user and send new OTP.
-                // In a real system, we would have a specific endpoint; but we can simulate by calling the same registration endpoint again.
-                // However, our current API would fail because email already exists (but pending). The service should handle that.
-                // We'll assume the service handles re-request.
-                // For this demo, we'll just alert.
-                alert('Resend functionality requires backend support. Please register again if OTP expired.');
-                // In production, you'd call: await resendOtp(email);
-            } catch (error) {
-                messageDiv.textContent = error.message || 'Resend failed';
+                const response = await fetch(`${API_BASE}/auth/register/request-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error?.message);
+                messageDiv.textContent = '✓ New verification code sent! Check your email.';
+                messageDiv.className = 'message success';
+            } catch (err) {
+                messageDiv.textContent = '❌ ' + err.message;
                 messageDiv.className = 'message error';
             }
         });
